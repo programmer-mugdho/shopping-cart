@@ -29,7 +29,7 @@ function calculateTotal(){
     document.getElementById('tax-amount').innerText = '$'+tax
 
     const grandTotal = totalPrice+tax
-    document.getElementById('grand-total').innerText = grandTotal
+    document.getElementById('grand-total').innerText = '$'+grandTotal
 
 }
 
