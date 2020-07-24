@@ -1,59 +1,40 @@
-// Phone plus button
-const phonePlusBtn = document.getElementById("phone-plus-btn")
-phonePlusBtn.addEventListener('click', function () {
-    plusButtonWork('phone-quantity','phone-price', 'case-price', 1219)
-})
+function handleProductChange(product, isIncrease) {
+    const productCount = getInputValue(product)
+    let productNewCount = productCount
+    if (isIncrease) {
+        productNewCount=productCount+1
+    }
+    if (!isIncrease && productCount>0) {
+        productNewCount = productCount-1
+    }
+    document.getElementById(product+'-count').value = productNewCount
+    let productTotal = 0;
+    if (product == 'phone') {
+        productTotal = productNewCount*1219
+    }
+    if (product=='case') {
+        productTotal=productNewCount*59
+    }
+    document.getElementById(product+'-total').innerText = '$'+ productTotal 
+    calculateTotal()
+}
+function calculateTotal(){
+    const phoneCount = getInputValue('phone')
+    const caseCount = getInputValue('case')
 
-// Phone minus button
-const phoneMinusBtn = document.getElementById('phone-minus-btn')
-phoneMinusBtn.addEventListener('click', function () {
-    minusButtonWork('phone-quantity', 'phone-price', 'case-price', 1219)
-})
+    const totalPrice = phoneCount* 1219 + caseCount*59;
+    document.getElementById('total-price').innerText = '$'+totalPrice
 
-// Case plus button
-const casePlusBtn = document.getElementById("case-plus-btn")
-casePlusBtn.addEventListener('click', function () {
-    plusButtonWork('case-quantity', 'case-price', 'phone-price', 59)
-})
+    const tax = Math.round(totalPrice * 0.1);
+    document.getElementById('tax-amount').innerText = '$'+tax
 
-// Case minus button
-const caseMinusBtn = document.getElementById("case-minus-btn")
-caseMinusBtn.addEventListener('click', function () {
-    minusButtonWork('case-quantity', 'case-price', 'phone-price', 59)
-})
+    const grandTotal = totalPrice+tax
+    document.getElementById('grand-total').innerText = grandTotal
 
-
-function plusButtonWork(phoneQuantityId, phonePriceId, casePriceId, price) {
-    const phoneQuantity = document.getElementById(phoneQuantityId).value;
-    let phoneQuantityNumber = parseFloat(phoneQuantity)
-    phoneQuantityNumber++
-    document.getElementById(phoneQuantityId).value = phoneQuantityNumber;
-    const phonePrice = document.getElementById(phonePriceId).innerText
-    const phonePriceNumber = parseFloat(phonePrice)
-    document.getElementById(phonePriceId).innerText = phonePriceNumber + price;
-    document.getElementById(phoneQuantityId).value = phoneQuantityNumber;
-    const casePrice = document.getElementById(casePriceId).innerText
-    const casePriceNumber = parseFloat(casePrice)
-    const subtotal = phonePriceNumber + price + casePriceNumber
-    document.getElementById("subtotal").innerText = subtotal
-    document.getElementById('total').innerText = subtotal
 }
 
-function minusButtonWork(phoneQuantityId, phonePriceId, casePriceId, price) {
-    const phoneQuantity = document.getElementById(phoneQuantityId).value;
-    let phoneQuantityNumber = parseFloat(phoneQuantity)
-    if (phoneQuantityNumber == 0) {
-        phoneMinusBtn.setAttribute('disabled')
-    }
-    phoneQuantityNumber--
-    document.getElementById(phoneQuantityId).value = phoneQuantityNumber;
-    const phonePrice = document.getElementById(phonePriceId).innerText
-    const phonePriceNumber = parseFloat(phonePrice)
-    document.getElementById(phonePriceId).innerText = phonePriceNumber - price;
-    document.getElementById(phoneQuantityId).value = phoneQuantityNumber;
-    const casePrice = document.getElementById(casePriceId).innerText
-    const casePriceNumber = parseFloat(casePrice)
-    const subtotal = phonePriceNumber - price + casePriceNumber
-    document.getElementById("subtotal").innerText = subtotal
-    document.getElementById('total').innerText = subtotal
+function getInputValue(product){
+    const productInput = document.getElementById(product+'-count');
+    const productCount = parseInt(productInput.value)
+    return productCount;
 }
